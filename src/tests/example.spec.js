@@ -42,3 +42,49 @@ test("lesson 3", async ({ page }) => {
     const userName = page.locator(".navbar-right").locator("strong");
     console.log("Logged user: " + await userName.textContent());
 });
+
+test("lesson 4", async ({ page }) => {
+    await page.goto("/prihlaseni");
+    await expect(page).toHaveScreenshot();
+
+    const emailField = page.getByLabel("Email");
+    await expect(emailField).toBeVisible();
+    await expect(emailField).toBeEnabled();
+
+    const passwordField = page.getByLabel("Heslo");
+    await expect(passwordField, "password field should be visible").toBeVisible();
+    await expect(passwordField).toBeEnabled();
+
+    const loginButton = page.getByRole('button', { name: 'Přihlásit' });
+    await expect(loginButton).toHaveText("Přihlásit");
+
+
+    await emailField.fill("da-app.admin@czechitas.cz");
+    await passwordField.fill("Czechitas123");
+    await loginButton.click();
+
+    const userName = page.locator(".navbar-right").locator("strong");
+    await expect(userName).toHaveText("Lišák Admin");
+})
+
+test("lesson 4.2", async ({ page }) => {
+    await page.goto("/")
+    const moreInfoButton = page.getByText("Více informací")
+    await expect(moreInfoButton).toBeVisible();
+    await moreInfoButton.click();
+    await expect(moreInfoButton).not.toBeAttached();
+
+    await page.getByRole('link', { name: 'Vytvořit přihlášku' }).click();
+
+    const emailField = page.getByLabel("Email");
+    const passwordField = page.getByLabel("Heslo");
+    const loginButton = page.getByRole('button', { name: 'Přihlásit' });
+    await emailField.fill("da-app.admin@czechitas.cz");
+    await passwordField.fill("Czechitas123");
+    await loginButton.click();
+
+    const checkbox = page.locator("#restrictions_yes");
+    await expect(checkbox).not.toBeChecked();
+    await checkbox.check({ force: true});
+    await expect(checkbox).toBeChecked();
+})
