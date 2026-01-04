@@ -25,12 +25,9 @@ Change the values to match your environment.
 ## Running tests
 
 **Run tests in interactive mode (recommended):**
-```
 npx playwright test --ui
-```
 
 **Run tests in headless mode:**
-```
 npx playwright test
 ```
 
