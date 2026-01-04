@@ -18,21 +18,21 @@ function generateTestData(prefix = 'Alena') {
         email: `alena${timestamp}@a.cz`,
         email2: `alenadve${timestamp}@a.cz`,
         password: `Heslo${timestamp}`,
-        invalidPassword: `${timestamp}` // Too short, missing uppercase and numbers
+        invalidPassword: `${timestamp}` 
     };
 }
 
-//sada testů pro registraci
+//Tests for Registration
 test.describe("Registration page", () => {
     let registrationPage;
 
-    //před každým testem se otevře stránka registrace
+//open Registration page before each test
     test.beforeEach(async ({ page }) => {
         registrationPage = new RegistrationPage(page);
         await registrationPage.open();
         await expect(page).toHaveURL(/registrace/);
     });
-
+//Valid registration test
     test('Valid registration test', { tag: ["@smoke", "@registration"] }, async ({ page }) => {
         const testData = generateTestData();
 
@@ -42,6 +42,7 @@ test.describe("Registration page", () => {
         await expect(userNameDisplay).toHaveText(testData.name);
     });
 
+//Invalid password test
     test("Invalid registration - password test", { tag: ["@smoke", "@registration"] }, async ({ page }) => {
         const testData = generateTestData('Alena - duplicate2');
 
@@ -50,7 +51,7 @@ test.describe("Registration page", () => {
         const registrationErrorField = page.getByText(ERROR_MESSAGES.INVALID_PASSWORD);
         await expect(registrationErrorField, "error field should be visible").toBeVisible();
     });
-
+//Invalid registration - use admin's email
     test("Invalid registration - email test", { tag: "@smoke" }, async ({ page }) => {
         const testData = generateTestData();
 
